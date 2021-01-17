@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/open-iconic/1.1.1/font/css/open-iconic-bootstrap.min.css">
+    <link rel="stylesheet" href="./assets/css/style.css">
+    <title>Weather Dashboard</title>
+</head>
+<body class="flex-column min-100-vh">
+    <header class="hero">
+        <h1 class="app-title text-light bg-dark p-3 text-center">Weather Dashboard</h1>
+    </header>
+
+    <main class="flex-row justify-space-between">
+
+        <div class="col-12 col-md-4">
+            <div class="card">
+                <h3 class="card-header">
+                    Search for a City:
+                </h3>
+                <form id="search-form" class="card-body">
+                    <input name="city" id ="city" type="text" autofocus="true" class="form-input" />
+                    <button class="btn btn-add" id="btn-search" type="submit">
+                        <span class="oi oi-magnifying-glass"></span>
+                    </button>
+                </form>
+                <div id="cities-container" class="list-group p-3">
+                    <h2>placeholder</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-md-8">
+            <div class="card">
+                <div id="weather-container"></div>
+            </div>>
+        </div>
+    </main>
+
+    <script src="./assets/js/script.js"></script>
+</body>
+</html>
