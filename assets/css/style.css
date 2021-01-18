@@ -1,0 +1,16 @@
+.severe {
+    background-color: red;
+}
+
+.moderate {
+    background-color: rgb(255, 196, 0);
+}
+
+.favorable {
+    background-color: rgb(33, 184, 33);
+}
+
+.forecast {
+    background-color: rgb(86, 86, 252);
+    color: white;
+}

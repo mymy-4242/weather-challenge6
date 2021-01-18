@@ -31,12 +31,13 @@ var getWeather = function(city) {
             });
         });
     })
+
    
 };
 
 var formSubmitHandler = function(event) {
     event.preventDefault();
-    
+
     //get value from form input
     var city = cityInputEl.value.trim();
 
@@ -46,12 +47,26 @@ var formSubmitHandler = function(event) {
     } else {
         alert("Please enter a city!");
     }
+
+    localStorage.setItem("past-search", city);
+
 };
 
+var buttonSubmitHandler = function(event) {
+    localStorage.getItem("past-search", JSON.stringify(city));
+    getWeather(city);
+}
+
 var displayWeather = function(forecast, searchTerm) {
+    weatherContainerEl.textContent = "";
+    forecastContainerEl.textContent = "";
+
     //create a header element for each city searched
-    var citySearchedEl = document.createElement("h2");
-    citySearchedEl.classList = "list-item flex-row justify-space-between align-left";
+    var citySearchedEl = document.createElement("button");
+    citySearchedEl.classList = "btn btn-block justify-space-between align-left";
+    citySearchedEl.id = "searchTerm";
+    citySearchedEl.addEventListener("click", buttonSubmitHandler);
+
 
     //create a span element to hold each city
     var cityEl = document.createElement("span");
@@ -60,8 +75,12 @@ var displayWeather = function(forecast, searchTerm) {
     citySearchedEl.appendChild(cityEl);
     citiesContainerEl.appendChild(citySearchedEl);
 
+    //format date
+    var timestamp = forecast.current.dt;
+    var dateObject = new Date(timestamp);
+    var date = dateObject.toLocaleString();
     //format weather title
-    var weatherTitle = forecast.timezone + " (" + forecast.current.dt + ")" + forecast.current.weather[0].icon;
+    var weatherTitle = searchTerm + " (" + date + ")" + forecast.current.weather[0].icon;
 
     //create weather card title
     var weatherTitleEl = document.createElement("h3");
@@ -75,8 +94,16 @@ var displayWeather = function(forecast, searchTerm) {
     //format current wind speed
     var windCurrent = "Wind Speed: " + forecast.current.wind_speed + " MPH";
     //format current uv index
-    var uvCurrent = "UV index: " + forecast.current.uvi;
-
+    var uvCurrentVal = document.createElement("span")
+    uvCurrentVal.textContent = forecast.current.uvi;
+        if (uvCurrentVal >= 6) {
+            uvCurrentVal.addClass = "severe";
+        } else if (uvCurrentVal >= 3) {
+            uvCurrentVal.addClass = "moderate";
+        } else {
+            uvCurrentVal.addClass = "favorable";
+        }
+    var uvCurrent = "UV index: " + uvCurrentVal;
 
     //create current weather card container
     var weatherCurrentEl = document.createElement("div");
@@ -89,6 +116,7 @@ var displayWeather = function(forecast, searchTerm) {
     humidityCurrentEl.textContent = humidityCurrent;
     var windCurrentEl = document.createElement("p");
     windCurrentEl.textContent = windCurrent;
+    //create uv content and color box
     var uvCurrentEl = document.createElement("p");
     uvCurrentEl.textContent = uvCurrent;
 
@@ -96,6 +124,7 @@ var displayWeather = function(forecast, searchTerm) {
     weatherCurrentEl.appendChild(tempCurrentEl);
     weatherCurrentEl.appendChild(humidityCurrentEl);
     weatherCurrentEl.appendChild(windCurrentEl);
+    weatherCurrentEl.appendChild(uvCurrentEl);
 
     //append weather card to container
     weatherContainerEl.appendChild(weatherTitleEl);
@@ -115,9 +144,12 @@ var displayWeather = function(forecast, searchTerm) {
     //loop over next 5 days
     for (var i=0; i < 5; i++) {
         //format date
-        var dateForecast = forecast.daily[i].dt;
+        var timestampForecast = forecast.daily[i].dt;
+        var dateForecastObject = new Date(timestampForecast);
+        var dateForecast = dateForecastObject.toLocaleString();
         //format weather icon
         var iconForecast = forecast.daily[i].weather[0].icon;
+        var iconUrl = "http://openweathermap.org/img/wn/" + iconForecast + "@2x.png";
         //format temp
         var tempForecast = "Temp: " + forecast.daily[i].temp.day + "°F";
         //format humidity
@@ -126,8 +158,8 @@ var displayWeather = function(forecast, searchTerm) {
         //create content for each forecast card
         var dateForecastEl = document.createElement("h4");
         dateForecastEl.textContent = dateForecast;
-        var iconForecastEl = document.createElement("img");
-        iconForecastEl.value = iconForecast;
+        var iconForecastEl = document.createElement("p");
+        iconForecastEl.value = iconUrl;
         var tempForecastEl = document.createElement("p");
         tempForecastEl.textContent = tempForecast;
         var humidityForecastEl = document.createElement("p");
@@ -135,11 +167,10 @@ var displayWeather = function(forecast, searchTerm) {
 
         //create a card for each forecast day
         var forecastEl = document.createElement("card");
-        forecastEl.classList = "forecast-card";
 
         //create a column for each card
         var forecastColEl = document.createElement("div");
-        forecastColEl.classList = "col-3";
+        forecastColEl.classList = "col-auto forecast m-2";
 
         forecastEl.appendChild(dateForecastEl);
         forecastEl.appendChild(iconForecastEl);
@@ -152,10 +183,8 @@ var displayWeather = function(forecast, searchTerm) {
     }
 
     forecastContainerEl.appendChild(daysContainerBody);
-
-
-
 };
+
 
 searchFormEl.addEventListener("submit", formSubmitHandler);
 
