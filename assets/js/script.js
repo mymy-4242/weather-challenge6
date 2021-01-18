@@ -7,7 +7,7 @@ var forecastContainerEl = document.querySelector("#day-container");
 
 var getWeather = function(city) {
     //format location url
-    var locationApiUrl = "http://www.mapquestapi.com/geocoding/v1/address?key=ftSt4NSxqTDFY9VLMjMLaFYCt6ijP9Df&location=" + city;
+    var locationApiUrl = "https://www.mapquestapi.com/geocoding/v1/address?key=ftSt4NSxqTDFY9VLMjMLaFYCt6ijP9Df&location=" + city;
 
     //fetch location
     fetch(locationApiUrl)
@@ -149,7 +149,7 @@ var displayWeather = function(forecast, searchTerm) {
         var dateForecast = dateForecastObject.toLocaleString();
         //format weather icon
         var iconForecast = forecast.daily[i].weather[0].icon;
-        var iconUrl = "http://openweathermap.org/img/wn/" + iconForecast + "@2x.png";
+        var iconUrl = "https://openweathermap.org/img/wn/" + iconForecast + "@2x.png";
         //format temp
         var tempForecast = "Temp: " + forecast.daily[i].temp.day + "°F";
         //format humidity
