@@ -2,7 +2,7 @@ var searchFormEl = document.querySelector("#search-form");
 var cityInputEl = document.querySelector("#city");
 var citiesContainerEl = document.querySelector("#cities-container");
 var weatherContainerEl = document.querySelector("#weather-container");
-
+var forecastContainerEl = document.querySelector("#day-container");
 
 
 var getWeather = function(city) {
@@ -74,6 +74,9 @@ var displayWeather = function(forecast, searchTerm) {
     var humidityCurrent = "Humidity: " + forecast.current.humidity + "%";
     //format current wind speed
     var windCurrent = "Wind Speed: " + forecast.current.wind_speed + " MPH";
+    //format current uv index
+    var uvCurrent = "UV index: " + forecast.current.uvi;
+
 
     //create current weather card container
     var weatherCurrentEl = document.createElement("div");
@@ -86,6 +89,8 @@ var displayWeather = function(forecast, searchTerm) {
     humidityCurrentEl.textContent = humidityCurrent;
     var windCurrentEl = document.createElement("p");
     windCurrentEl.textContent = windCurrent;
+    var uvCurrentEl = document.createElement("p");
+    uvCurrentEl.textContent = uvCurrent;
 
     //append current weather to card
     weatherCurrentEl.appendChild(tempCurrentEl);
@@ -95,6 +100,61 @@ var displayWeather = function(forecast, searchTerm) {
     //append weather card to container
     weatherContainerEl.appendChild(weatherTitleEl);
     weatherContainerEl.appendChild(weatherCurrentEl);
+
+    //create 5 day forecast content
+    //create 5 day forecast header and body
+    var daysTitle = "5-Day Forecast:";
+    var daysContainerTitle = document.createElement("h3");
+    daysContainerTitle.textContent = daysTitle;
+    var daysContainerBody = document.createElement("div");
+    daysContainerBody.classList = "row";
+
+    //append 5 day forecast header  and body to container
+    forecastContainerEl.appendChild(daysContainerTitle);
+
+    //loop over next 5 days
+    for (var i=0; i < 5; i++) {
+        //format date
+        var dateForecast = forecast.daily[i].dt;
+        //format weather icon
+        var iconForecast = forecast.daily[i].weather[0].icon;
+        //format temp
+        var tempForecast = "Temp: " + forecast.daily[i].temp.day + "°F";
+        //format humidity
+        var humidityForecast = "Humidity: " + forecast.daily[i].humidity + "%";
+
+        //create content for each forecast card
+        var dateForecastEl = document.createElement("h4");
+        dateForecastEl.textContent = dateForecast;
+        var iconForecastEl = document.createElement("img");
+        iconForecastEl.value = iconForecast;
+        var tempForecastEl = document.createElement("p");
+        tempForecastEl.textContent = tempForecast;
+        var humidityForecastEl = document.createElement("p");
+        humidityForecastEl.textContent = humidityForecast;
+
+        //create a card for each forecast day
+        var forecastEl = document.createElement("card");
+        forecastEl.classList = "forecast-card";
+
+        //create a column for each card
+        var forecastColEl = document.createElement("div");
+        forecastColEl.classList = "col-3";
+
+        forecastEl.appendChild(dateForecastEl);
+        forecastEl.appendChild(iconForecastEl);
+        forecastEl.appendChild(tempForecastEl);
+        forecastEl.appendChild(humidityForecastEl);
+
+        forecastColEl.appendChild(forecastEl);
+        daysContainerBody.appendChild(forecastColEl);
+
+    }
+
+    forecastContainerEl.appendChild(daysContainerBody);
+
+
+
 };
 
 searchFormEl.addEventListener("submit", formSubmitHandler);
